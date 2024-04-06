@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'mi.m4x.project'
+version '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:9.5'
+    implementation 'org.ow2.asm:asm-tree:9.5'
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes 'Main-Class': 'mi.m4x.project.nekoshield.NekoShield'
+    }
+}
+
+tasks.named('shadowJar') {
+    archiveClassifier.set("")
+    manifest {
+        attributes 'Main-Class': 'mi.m4x.project.nekoshield.NekoShield'
+    }
+    configurations = [project.configurations.runtimeClasspath]
+}
